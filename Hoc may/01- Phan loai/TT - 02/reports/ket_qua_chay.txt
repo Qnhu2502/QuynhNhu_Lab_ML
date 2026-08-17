@@ -1,0 +1,220 @@
+======================================================================
+BƯỚC 1 — DF.NUNIQUE() → PHÁT HIỆN & BỎ CỘT VÔ DỤNG
+======================================================================
+Kích thước dữ liệu gốc: (1470, 35)
+
+Các cột có SỐ GIÁ TRỊ DUY NHẤT <= 1 (0 thông tin):
+  ['EmployeeCount', 'Over18', 'StandardHours']
+
+Các cột có SỐ GIÁ TRỊ DUY NHẤT = số dòng (mã định danh):
+  ['EmployeeNumber']
+
+>>> Quyết định BỎ 4 cột: ['StandardHours', 'EmployeeCount', 'Over18', 'EmployeeNumber']
+Kích thước sau khi bỏ cột vô dụng: (1470, 31)
+
+Tỷ lệ nghỉ việc (Attrition=1): 16.1%
+
+======================================================================
+BƯỚC 2 — MÃ HOÁ BIẾN PHÂN LOẠI (OneHotEncoder trong Pipeline)
+======================================================================
+Cột phân loại (categorical) — 7 cột: ['BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime']
+Cột số (numeric) — 23 cột: ['Age', 'DailyRate', 'DistanceFromHome', 'Education', 'EnvironmentSatisfaction', 'HourlyRate', 'JobInvolvement', 'JobLevel', 'JobSatisfaction', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'TotalWorkingYears', 'TrainingTimesLastYear', 'WorkLifeBalance', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']
+
+>>> Dùng ColumnTransformer + OneHotEncoder, KHÔNG cần StandardScaler
+    (Decision Tree không nhạy với thang đo của biến số).
+
+======================================================================
+BƯỚC 3 — EDA: TỈ LỆ NGHỈ VIỆC THEO OVERTIME / JOBROLE / YEARSATCOMPANY
+======================================================================
+
+Tỉ lệ nghỉ việc theo OverTime:
+OverTime
+No     10.4
+Yes    30.5
+
+Tỉ lệ nghỉ việc theo JobRole (top 3 cao nhất):
+JobRole
+Sales Representative     39.8
+Laboratory Technician    23.9
+Human Resources          23.1
+
+Tỉ lệ nghỉ việc theo YearsAtCompany:
+_YearsBin
+0-2      29.8
+3-5      13.8
+6-10     12.3
+11-20     6.7
+20+      12.1
+
+Đã lưu: reports/eda_attrition.png
+
+======================================================================
+BƯỚC 4 — CHIA TRAIN/TEST + BASELINE DUMMYCLASSIFIER
+======================================================================
+Train: (1176, 30) | Test: (294, 30)
+Baseline Accuracy: 0.840
+Baseline F1      : 0.000  (luôn = 0 vì chỉ đoán lớp đa số)
+
+======================================================================
+BƯỚC 5 — CÂY KHÔNG GIỚI HẠN ĐỘ SÂU (max_depth=None) → CHỨNG MINH OVERFIT
+======================================================================
+Accuracy TRAIN (max_depth=None): 1.000
+Accuracy TEST  (max_depth=None): 0.779
+Độ sâu cây thực tế mọc tới: 14
+Số lá: 155
+
+>>> ⚠️ Đúng như dự đoán: train gần như 100%, test thấp hơn nhiều → OVERFIT rõ rệt.
+
+======================================================================
+BƯỚC 6 — ACCURACY TRAIN/TEST THEO max_depth = 1..20
+======================================================================
+Đã lưu: reports/overfit_theo_depth.png
+
+Khoảng cách train-test lớn dần rõ rệt từ khoảng max_depth=6
+Giải thích: depth nhỏ → cây quá đơn giản (underfit nhẹ, train~test thấp).
+depth tăng → train tăng nhanh tới gần 100%, test bắt đầu chững/giảm nhẹ
+→ đó là vùng OVERFIT, cây bắt đầu học thuộc nhiễu của tập train.
+
+======================================================================
+BƯỚC 7 — GRIDSEARCHCV: max_depth, min_samples_leaf, criterion (scoring='f1')
+======================================================================
+Best params: {'clf__criterion': 'entropy', 'clf__max_depth': 5, 'clf__min_samples_leaf': 20}
+Best CV F1: 0.447
+
+======================================================================
+BƯỚC 8 — VẼ CÂY TỐT NHẤT + EXPORT_TEXT
+======================================================================
+Đã lưu: reports/cay_quyet_dinh.png
+
+export_text (dạng văn bản của cây):
+|--- TotalWorkingYears <= 2.50
+|   |--- JobRole_Research Scientist <= 0.50
+|   |   |--- Age <= 28.50
+|   |   |   |--- MonthlyIncome <= 2378.50
+|   |   |   |   |--- class: 1
+|   |   |   |--- MonthlyIncome >  2378.50
+|   |   |   |   |--- class: 1
+|   |   |--- Age >  28.50
+|   |   |   |--- class: 1
+|   |--- JobRole_Research Scientist >  0.50
+|   |   |--- class: 1
+|--- TotalWorkingYears >  2.50
+|   |--- OverTime_Yes <= 0.50
+|   |   |--- NumCompaniesWorked <= 4.50
+|   |   |   |--- BusinessTravel_Non-Travel <= 0.50
+|   |   |   |   |--- WorkLifeBalance <= 1.50
+|   |   |   |   |   |--- class: 1
+|   |   |   |   |--- WorkLifeBalance >  1.50
+|   |   |   |   |   |--- class: 0
+|   |   |   |--- BusinessTravel_Non-Travel >  0.50
+|   |   |   |   |--- class: 0
+|   |   |--- NumCompaniesWorked >  4.50
+|   |   |   |--- Age <= 37.50
+|   |   |   |   |--- StockOptionLevel <= 0.50
+|   |   |   |   |   |--- class: 1
+|   |   |   |   |--- StockOptionLevel >  0.50
+|   |   |   |   |   |--- class: 0
+|   |   |   |--- Age >  37.50
+|   |   |   |   |--- YearsInCurrentRole <= 2.50
+|   |   |   |   |   |--- class: 0
+|   |   |   |   |--- YearsInCurrentRole >  2.50
+|   |   |   |   |   |--- class: 0
+|   |--- OverTime_Yes >  0.50
+|   |   |--- MonthlyIncome <= 2476.00
+|   |   |   |--- class: 1
+|   |   |--- MonthlyIncome >  2476.00
+|   |   |   |--- EnvironmentSatisfaction <= 2.50
+|   |   |   |   |--- StockOptionLevel <= 0.50
+|   |   |   |   |   |--- class: 1
+|   |   |   |   |--- StockOptionLevel >  0.50
+|   |   |   |   |   |--- class: 1
+|   |   |   |--- EnvironmentSatisfaction >  2.50
+|   |   |   |   |--- MaritalStatus_Single <= 0.50
+|   |   |   |   |   |--- class: 0
+|   |   |   |   |--- MaritalStatus_Single >  0.50
+|   |   |   |   |   |--- class: 1
+
+
+======================================================================
+BƯỚC 9 — FEATURE IMPORTANCE TOP 10
+======================================================================
+
+Top 10 biến quan trọng nhất:
+TotalWorkingYears            0.2307
+OverTime_Yes                 0.1828
+Age                          0.0895
+MonthlyIncome                0.0806
+NumCompaniesWorked           0.0761
+EnvironmentSatisfaction      0.0743
+StockOptionLevel             0.0742
+BusinessTravel_Non-Travel    0.0490
+YearsInCurrentRole           0.0390
+MaritalStatus_Single         0.0372
+
+Đã lưu: reports/feature_importance.png
+
+⚖️ KIỂM TRA ĐẠO ĐỨC: các biến nhạy cảm (Gender/MaritalStatus) có importance > 0:
+MaritalStatus_Single    0.0372
+>>> CẢNH BÁO: cây có dùng biến nhạy cảm để chia nhánh, cần cân nhắc loại bỏ.
+
+======================================================================
+BƯỚC 10 — ĐÁNH GIÁ TRÊN TEST (chạm 1 lần) + TRÍCH XUẤT CÁC LUẬT TỪ LÁ
+======================================================================
+Test Accuracy : 0.745
+Test Recall   : 0.638
+Test Precision: 0.341
+Test F1       : 0.444
+
+Classification report:
+              precision    recall  f1-score   support
+
+           0       0.92      0.77      0.83       247
+           1       0.34      0.64      0.44        47
+
+    accuracy                           0.74       294
+   macro avg       0.63      0.70      0.64       294
+weighted avg       0.83      0.74      0.77       294
+
+Confusion matrix:
+[[189  58]
+ [ 17  30]]
+
+Bảng luật trích xuất từ các lá (chỉ lấy lá có >= 20 người, sắp theo tỉ lệ nghỉ giảm dần):
+                                                                                                                                         dieu_kien  so_nguoi  so_nguoi_nghi  ty_le_nghi_pct
+0                                      TotalWorkingYears <= 2.50 VÀ JobRole_Research Scientist <= 0.50 VÀ Age <= 28.50 VÀ MonthlyIncome <= 2378.50        20             17            85.0
+1                                       TotalWorkingYears <= 2.50 VÀ JobRole_Research Scientist <= 0.50 VÀ Age <= 28.50 VÀ MonthlyIncome > 2378.50        20             13            65.0
+2                                                                      TotalWorkingYears > 2.50 VÀ OverTime_Yes > 0.50 VÀ MonthlyIncome <= 2476.00        37             23            62.2
+3        TotalWorkingYears > 2.50 VÀ OverTime_Yes > 0.50 VÀ MonthlyIncome > 2476.00 VÀ EnvironmentSatisfaction <= 2.50 VÀ StockOptionLevel <= 0.50        41             22            53.7
+4                        TotalWorkingYears > 2.50 VÀ OverTime_Yes <= 0.50 VÀ NumCompaniesWorked > 4.50 VÀ Age <= 37.50 VÀ StockOptionLevel <= 0.50        35             18            51.4
+5                                                                   TotalWorkingYears <= 2.50 VÀ JobRole_Research Scientist <= 0.50 VÀ Age > 28.50        29             13            44.8
+6      TotalWorkingYears > 2.50 VÀ OverTime_Yes > 0.50 VÀ MonthlyIncome > 2476.00 VÀ EnvironmentSatisfaction > 2.50 VÀ MaritalStatus_Single > 0.50        45             11            24.4
+7   TotalWorkingYears > 2.50 VÀ OverTime_Yes <= 0.50 VÀ NumCompaniesWorked <= 4.50 VÀ BusinessTravel_Non-Travel <= 0.50 VÀ WorkLifeBalance <= 1.50        25              6            24.0
+8                                                                                   TotalWorkingYears <= 2.50 VÀ JobRole_Research Scientist > 0.50        27              6            22.2
+9         TotalWorkingYears > 2.50 VÀ OverTime_Yes > 0.50 VÀ MonthlyIncome > 2476.00 VÀ EnvironmentSatisfaction <= 2.50 VÀ StockOptionLevel > 0.50        50             10            20.0
+10                        TotalWorkingYears > 2.50 VÀ OverTime_Yes <= 0.50 VÀ NumCompaniesWorked > 4.50 VÀ Age <= 37.50 VÀ StockOptionLevel > 0.50        47              6            12.8
+11                       TotalWorkingYears > 2.50 VÀ OverTime_Yes <= 0.50 VÀ NumCompaniesWorked > 4.50 VÀ Age > 37.50 VÀ YearsInCurrentRole > 2.50        60              6            10.0
+12    TotalWorkingYears > 2.50 VÀ OverTime_Yes > 0.50 VÀ MonthlyIncome > 2476.00 VÀ EnvironmentSatisfaction > 2.50 VÀ MaritalStatus_Single <= 0.50       140             10             7.1
+13   TotalWorkingYears > 2.50 VÀ OverTime_Yes <= 0.50 VÀ NumCompaniesWorked <= 4.50 VÀ BusinessTravel_Non-Travel <= 0.50 VÀ WorkLifeBalance > 1.50       492             29             5.9
+14                              TotalWorkingYears > 2.50 VÀ OverTime_Yes <= 0.50 VÀ NumCompaniesWorked <= 4.50 VÀ BusinessTravel_Non-Travel > 0.50        64              0             0.0
+15                      TotalWorkingYears > 2.50 VÀ OverTime_Yes <= 0.50 VÀ NumCompaniesWorked > 4.50 VÀ Age > 37.50 VÀ YearsInCurrentRole <= 2.50        44              0             0.0
+
+Đã lưu: reports/bang_luat_tu_cay.csv
+
+======================================================================
+BƯỚC 11 — SO SÁNH VỚI RANDOM FOREST → MẤT GÌ, ĐƯỢC GÌ?
+======================================================================
+Model                   Accuracy    Recall  Precision      F1
+Decision Tree (best)       0.745     0.638      0.341   0.444
+Random Forest              0.820     0.574      0.450   0.505
+
+>>> Kiểm tra độ ỔN ĐỊNH của cây đơn (đổi random_state, cùng tham số tốt nhất):
+Biến quan trọng nhất (top-1) qua 5 random_state khác nhau: ['TotalWorkingYears', 'TotalWorkingYears', 'TotalWorkingYears', 'TotalWorkingYears', 'TotalWorkingYears']
+>>> Nếu danh sách trên KHÔNG giống nhau hoàn toàn, đây là bằng chứng cây đơn KHÔNG ỔN ĐỊNH
+    — lý do Random Forest ra đời (trung bình nhiều cây để giảm phương sai).
+
+>>> Kết luận đánh đổi: Random Forest thường cho Accuracy/F1/Recall cao và ỔN ĐỊNH
+    hơn 1 cây đơn (giảm phương sai nhờ trung bình nhiều cây). Đổi lại, MẤT khả
+    năng đọc trực tiếp thành luật IF-THEN đơn giản — 300 cây không thể in ra giấy
+    cho HR đọc như 1 cây max_depth=4. Với mục tiêu bài này (rút quy tắc dễ hiểu),
+    Decision Tree đơn vẫn phù hợp hơn; Random Forest phù hợp hơn khi ưu tiên độ
+    chính xác/ổn định và chấp nhận mất khả năng diễn giải trực tiếp.
