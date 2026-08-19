@@ -1,0 +1,46 @@
+|--- TotalWorkingYears <= 2.50
+|   |--- JobRole_Research Scientist <= 0.50
+|   |   |--- Age <= 28.50
+|   |   |   |--- MonthlyIncome <= 2378.50
+|   |   |   |   |--- class: 1
+|   |   |   |--- MonthlyIncome >  2378.50
+|   |   |   |   |--- class: 1
+|   |   |--- Age >  28.50
+|   |   |   |--- class: 1
+|   |--- JobRole_Research Scientist >  0.50
+|   |   |--- class: 1
+|--- TotalWorkingYears >  2.50
+|   |--- OverTime_Yes <= 0.50
+|   |   |--- NumCompaniesWorked <= 4.50
+|   |   |   |--- BusinessTravel_Non-Travel <= 0.50
+|   |   |   |   |--- WorkLifeBalance <= 1.50
+|   |   |   |   |   |--- class: 1
+|   |   |   |   |--- WorkLifeBalance >  1.50
+|   |   |   |   |   |--- class: 0
+|   |   |   |--- BusinessTravel_Non-Travel >  0.50
+|   |   |   |   |--- class: 0
+|   |   |--- NumCompaniesWorked >  4.50
+|   |   |   |--- Age <= 37.50
+|   |   |   |   |--- StockOptionLevel <= 0.50
+|   |   |   |   |   |--- class: 1
+|   |   |   |   |--- StockOptionLevel >  0.50
+|   |   |   |   |   |--- class: 0
+|   |   |   |--- Age >  37.50
+|   |   |   |   |--- YearsInCurrentRole <= 2.50
+|   |   |   |   |   |--- class: 0
+|   |   |   |   |--- YearsInCurrentRole >  2.50
+|   |   |   |   |   |--- class: 0
+|   |--- OverTime_Yes >  0.50
+|   |   |--- MonthlyIncome <= 2476.00
+|   |   |   |--- class: 1
+|   |   |--- MonthlyIncome >  2476.00
+|   |   |   |--- EnvironmentSatisfaction <= 2.50
+|   |   |   |   |--- StockOptionLevel <= 0.50
+|   |   |   |   |   |--- class: 1
+|   |   |   |   |--- StockOptionLevel >  0.50
+|   |   |   |   |   |--- class: 1
+|   |   |   |--- EnvironmentSatisfaction >  2.50
+|   |   |   |   |--- MaritalStatus_Single <= 0.50
+|   |   |   |   |   |--- class: 0
+|   |   |   |   |--- MaritalStatus_Single >  0.50
+|   |   |   |   |   |--- class: 1
