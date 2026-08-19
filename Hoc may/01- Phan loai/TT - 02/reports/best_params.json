@@ -1,5 +1,0 @@
-{
-  "clf__criterion": "entropy",
-  "clf__max_depth": 5,
-  "clf__min_samples_leaf": 20
-}
