@@ -1,0 +1,65 @@
+{
+  "no_scale": {
+    "recall": 0.8571,
+    "precision": 0.9474
+  },
+  "with_scale": {
+    "recall": 0.9762,
+    "precision": 0.9762
+  },
+  "kernels": [
+    {
+      "kernel": "linear",
+      "recall_ác_tính": 0.9761904761904762,
+      "precision_ác_tính": 0.9534883720930233,
+      "n_support_vectors": 32
+    },
+    {
+      "kernel": "rbf",
+      "recall_ác_tính": 0.9761904761904762,
+      "precision_ác_tính": 0.9761904761904762,
+      "n_support_vectors": 97
+    },
+    {
+      "kernel": "poly",
+      "recall_ác_tính": 0.7619047619047619,
+      "precision_ác_tính": 1.0,
+      "n_support_vectors": 145
+    }
+  ],
+  "grid_search_best_params": {
+    "svm__C": 1,
+    "svm__gamma": "scale",
+    "svm__kernel": "rbf"
+  },
+  "grid_search_best_cv_f2": 0.9694,
+  "support_vectors": {
+    "per_class": {
+      "malignant": 49,
+      "benign": 59
+    },
+    "total": 108,
+    "train_size": 455,
+    "pct": 23.74
+  },
+  "chosen_threshold": 0.4,
+  "threshold_selected_on": "out-of-fold predictions on TRAIN (cross_val_predict), not test",
+  "final_test_recall_ác_tính": 0.9762,
+  "final_test_precision_ác_tính": 0.8913,
+  "false_negatives_on_test": 1,
+  "malignant_in_test": 42,
+  "logistic_regression_comparison": [
+    {
+      "model": "SVM (tuned + ngưỡng)",
+      "recall_ác_tính": 0.9761904761904762,
+      "precision_ác_tính": 0.8913043478260869,
+      "ROC_AUC": 0.9940476190476191
+    },
+    {
+      "model": "Logistic Regression",
+      "recall_ác_tính": 0.9761904761904762,
+      "precision_ác_tính": 0.9111111111111111,
+      "ROC_AUC": 0.9953703703703705
+    }
+  ]
+}
