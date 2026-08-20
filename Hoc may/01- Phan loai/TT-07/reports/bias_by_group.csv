@@ -1,0 +1,8 @@
+group_col,group,n,positive_rate_true,positive_rate_pred,accuracy
+sex,Male,10860,0.3,0.251,0.841
+sex,Female,5421,0.109,0.079,0.938
+race,Black,1561,0.115,0.081,0.931
+race,White,13946,0.25,0.207,0.866
+race,Asian-Pac-Islander,480,0.277,0.24,0.858
+race,Other,135,0.185,0.089,0.889
+race,Amer-Indian-Eskimo,159,0.119,0.094,0.899
