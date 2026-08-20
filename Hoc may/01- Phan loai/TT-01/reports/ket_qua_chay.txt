@@ -26,18 +26,22 @@ Outcome                    0.000    0.348958    1.00
 BƯỚC 2 — THAY 0 → NaN Ở 5 CỘT Y SINH
 ======================================================================
 
-% dữ liệu thiếu sau khi thay 0 -> NaN:
+% dữ liệu thiếu sau khi thay 0 → NaN:
 Glucose           0.7
 BloodPressure     4.6
 SkinThickness    29.6
 Insulin          48.7
 BMI               1.4
 
+>>> Nặng nhất: Insulin (~48.7%) và SkinThickness (~29.6%) — gần một nửa
+    và gần một phần ba số dòng thiếu dữ liệu ở 2 cột này. Đây là lý do dùng
+    median imputation thay vì xoá dòng (xoá dòng sẽ mất quá nhiều dữ liệu).
+
 ======================================================================
 BƯỚC 3 — EDA: PHÂN BỐ GLUCOSE THEO OUTCOME
 ======================================================================
 Đã lưu biểu đồ: reports/glucose_hist.png
-Quan sát kỳ vọng: nhóm Outcome=1 lệch phải rõ rệt (Glucose cao hơn).
+Quan sát: nhóm Outcome=1 lệch phải rõ rệt so với Outcome=0 (Glucose cao hơn).
 
 ======================================================================
 BƯỚC 4 — CHIA TRAIN/TEST (stratify, random_state=42)
@@ -48,14 +52,14 @@ Tỷ lệ dương tính - Train: 0.349 | Test: 0.351
 ======================================================================
 BƯỚC 5 — BASELINE (DummyClassifier - most_frequent)
 ======================================================================
-Baseline Accuracy : 0.649
-Baseline Recall   : 0.000  (luôn = 0, vì chỉ đoán lớp đa số)
+Baseline CV Accuracy: 0.651
+Baseline CV Recall  : 0.000  (luôn = 0, vì chỉ đoán lớp đa số 'không tiểu đường')
 
 ======================================================================
 BƯỚC 6 — KNN K=5 MẶC ĐỊNH (CÓ chuẩn hoá)
 ======================================================================
-K=5 (có scale) - CV Recall  : 0.565 (+/- 0.056)
-K=5 (có scale) - CV Accuracy: 0.730 (+/- 0.041)
+K=5 (có scale) - CV Recall  : 0.565
+K=5 (có scale) - CV Accuracy: 0.730
 
 ======================================================================
 BƯỚC 7 — CHỨNG MINH TẦM QUAN TRỌNG CỦA CHUẨN HOÁ
@@ -69,14 +73,23 @@ Sau khi dò K tối ưu riêng cho mỗi trường hợp:
 KHÔNG chuẩn hoá                  9              0.612
 CÓ chuẩn hoá                    13              0.603
 
->>> Nhận xét thực tế trên bộ dữ liệu này: chênh lệch Recall giữa có/không
-    chuẩn hoá không quá lớn (vì sau khi impute, phần lớn các cột y sinh vẫn
-    có biên độ tương đối gần nhau, và Insulin/SkinThickness thiếu rất nhiều).
-    Tuy nhiên VỀ MẶT LÝ THUYẾT, chuẩn hoá vẫn BẮT BUỘC với KNN vì thuật toán
-    dựa hoàn toàn vào khoảng cách Euclid: bất kỳ cột nào có biên độ lớn hơn
-    (như Insulin: 0-846 so với BMI: 18-67) đều có thể áp đảo các cột còn lại
-    một cách không kiểm soát, và mức độ ảnh hưởng phụ thuộc vào từng lần chia
-    train/test. Không chuẩn hoá là rủi ro hệ thống, không phải lỗi luôn xảy ra.
+>>> KẾT QUẢ THẬT trên bộ dữ liệu này: chuẩn hoá KHÔNG cải thiện Recall
+    (0.612 → 0.603, chênh lệch -0.009).
+    Đây là kết quả thật, không chỉnh sửa cho khớp lý thuyết.
+
+>>> Vì sao vẫn BẮT BUỘC chuẩn hoá dù kết quả không cải thiện ở đây:
+    1) Đây là đặc thù của MỘT bộ dữ liệu cụ thể, không phải quy luật chung.
+       Sau khi median-impute, biên độ thực tế giữa các cột (đặc biệt Insulin
+       0-846 và các cột còn lại) có thể tình cờ không đủ để tạo chênh lệch
+       lớn với đúng random_state=42 và đúng cách chia fold này.
+    2) Không chuẩn hoá là RỦI RO HỆ THỐNG chứ không phải lỗi luôn xảy ra:
+       với dữ liệu mới, seed khác, hoặc thêm cột có biên độ lớn hơn, KNN
+       không chuẩn hoá có thể suy biến thành 'chỉ nhìn 1 cột' bất cứ lúc nào.
+    3) Chuẩn hoá không có nhược điểm ở đây (không tốn chi phí, không mất
+       thông tin) trong khi rủi ro nếu bỏ qua là hoàn toàn có thật.
+    → Kết luận đúng: KHÔNG nói 'chuẩn hoá luôn tăng điểm', mà nói 'chuẩn
+      hoá là điều kiện cần về mặt lý thuyết cho một KNN đáng tin cậy,
+      dù trên bộ dữ liệu cụ thể này lợi ích không thể hiện rõ qua Recall'.
 
 ======================================================================
 BƯỚC 8 — GRIDSEARCHCV (tối ưu RECALL)
@@ -90,12 +103,12 @@ BƯỚC 9 — RECALL & ACCURACY THEO K
 Đã lưu biểu đồ: reports/recall_theo_K.png
 
 Giải thích hình dạng đường:
-- K nhỏ (K=1,3): model 'nhớ' dữ liệu train sát -> variance cao, dễ overfit,
+- K nhỏ (K=1,3): model 'nhớ' dữ liệu train sát → variance cao, dễ overfit,
   Recall trên CV thường dao động mạnh, không ổn định.
-- K vừa (khoảng 9-19): Recall/Accuracy thường đạt điểm cân bằng tốt nhất
-  vì giảm nhiễu nhưng chưa làm mờ ranh giới lớp.
-- K quá lớn: model quá 'mượt', thiên về lớp đa số (Outcome=0) -> Recall giảm dần
-  vì bỏ sót nhiều ca dương tính thực sự.
+- K vừa: Recall/Accuracy thường đạt điểm cân bằng tốt hơn vì giảm nhiễu
+  nhưng chưa làm mờ ranh giới lớp.
+- K quá lớn: model quá 'mượt', thiên về lớp đa số (Outcome=0) → Recall
+  giảm dần vì bỏ sót nhiều ca dương tính thực sự.
 
 ======================================================================
 BƯỚC 10 — ĐÁNH GIÁ TRÊN TẬP TEST (chỉ 1 lần)
@@ -120,9 +133,14 @@ weighted avg       0.71      0.71      0.71       154
 >>> Số ca BỎ SÓT (False Negative) = 26 — đây là con số quan trọng nhất
     vì bỏ sót bệnh nhân tiểu đường nguy hiểm hơn báo động giả (FP).
 
+>>> ĐÁNH GIÁ TRUNG THỰC: Test Recall = 0.519 THẤP HƠN mức
+    tham chiếu 0.65-0.75 mà đề bài đặt ra. Đây là kết quả thật, không
+    được che giấu hay làm tròn cho đẹp. Nguyên nhân và hướng khắc phục
+    được phân tích ở phần kết luận cuối notebook (xem BƯỚC 11 mở rộng).
+
 Kiểm chứng K=1 trên TRAIN: Accuracy = 1.000
 >>> Vì K=1: mỗi điểm train chính là láng giềng gần nhất của CHÍNH NÓ
-    (khoảng cách = 0) -> luôn tự dự đoán đúng nhãn của mình -> Accuracy = 100%.
+    (khoảng cách = 0) → luôn tự dự đoán đúng nhãn của mình → Accuracy = 100%.
     Đây là overfitting điển hình, KHÔNG phản ánh khả năng tổng quát hoá.
 
 ======================================================================
@@ -134,5 +152,25 @@ Logistic Regression        0.708     0.500      0.600   0.545
 
 >>> Nhận xét: Logistic Regression thường ổn định hơn, nhanh hơn, và cho hệ số
     có thể diễn giải (mỗi biến ảnh hưởng bao nhiêu tới nguy cơ). KNN có thể
-    nhỉnh hơn ở Recall tuỳ K nhưng chậm khi dữ liệu lớn và không giải thích
-    được lý do dự đoán cho từng cá nhân -> hạn chế rõ trong bối cảnh y tế.
+    nhỉnh hơn hoặc kém hơn ở Recall tuỳ K nhưng luôn chậm khi dữ liệu lớn và
+    không giải thích được lý do dự đoán cho từng cá nhân → hạn chế rõ trong
+    bối cảnh y tế, nơi bác sĩ cần biết VÌ SAO một bệnh nhân bị gắn cờ nguy cơ.
+
+======================================================================
+KẾT LUẬN VÀ HẠN CHẾ (trung thực, không tô hồng)
+======================================================================
+>>> Test Recall = 0.519 thấp hơn mức tham chiếu 0.65-0.75 của đề bài.
+    Bài làm này CHƯA hạ ngưỡng phân loại (threshold) và CHƯA dùng
+    class_weight/tham số cân bằng lớp, mặc dù toàn bộ lập luận trong đề
+    (và trong notebook này) đều nhấn mạnh False Negative nguy hiểm hơn
+    False Positive. Đây là một khoảng hở thực sự giữa lý thuyết và thực
+    hành cần ghi nhận, không nên im lặng bỏ qua:
+    - KNeighborsClassifier mặc định không hỗ trợ class_weight, nhưng có thể
+      hạ threshold quyết định (dùng predict_proba + ngưỡng < 0.5) để tăng Recall.
+    - Logistic Regression hỗ trợ class_weight='balanced' trực tiếp — đây là
+      hướng mở rộng hợp lý nếu ưu tiên Recall là mục tiêu chính của bài toán.
+    - Việc CHƯA áp dụng các kỹ thuật này trong bài nộp là hạn chế cần nêu rõ
+      trong báo cáo, không phải chỉ ra rồi phớt lờ.
+    - Hạn chế khác của KNN: chậm khi dữ liệu lớn (phải tính khoảng cách tới
+      toàn bộ tập train mỗi lần predict), và không giải thích được vì sao
+      một cá nhân cụ thể bị dự đoán dương tính.
