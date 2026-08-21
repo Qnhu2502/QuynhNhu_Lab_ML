@@ -1,0 +1,16 @@
+{
+  "auc_dummy": 0.4970469796274442,
+  "auc_tree": 0.7463547554310834,
+  "oob_score_rf": 0.8223567794735678,
+  "best_n_estimators_oob": 500,
+  "cv_auc_mean": 0.7799135308345402,
+  "cv_auc_std": 0.004405951539424627,
+  "grid_best_params": {
+    "clf__max_depth": 10,
+    "clf__n_estimators": 200
+  },
+  "grid_best_cv_auc": 0.7863892956800471,
+  "auc_rf_test": 0.7941178698717941,
+  "precision_at_5000": 0.1816,
+  "lift_at_5000": 1.5521822306238187
+}
