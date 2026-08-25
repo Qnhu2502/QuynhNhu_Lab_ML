@@ -1,0 +1,4 @@
+model,f1_val,accuracy_val,precision_val,recall_val,train_time_s
+AdaBoost,0.984,0.986,0.993,0.976,85.74
+GradientBoosting,0.998,0.998,0.999,0.998,144.82
+RandomForest,0.999,0.999,0.999,0.999,6.04

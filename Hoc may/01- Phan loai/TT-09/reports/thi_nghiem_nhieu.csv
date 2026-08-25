@@ -1,0 +1,3 @@
+model,f1_nhan_sach,f1_nhan_nhieu_5pct,sut_giam,sut_giam_pct
+AdaBoost,0.984,0.974,0.01,1.1
+RandomForest,0.999,0.993,0.006,0.6

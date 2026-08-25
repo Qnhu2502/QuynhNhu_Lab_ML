@@ -1,0 +1,2 @@
+model,f1_validation_tuong_duong,f1_test_goc_tan_cong_la,accuracy_test_goc,fp_rate_test,fn_rate_test
+"AdaBoost (final, fit tren toan bo train)",0.984,0.758,0.766,0.0734,0.3563
