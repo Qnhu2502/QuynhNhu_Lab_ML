@@ -1,0 +1,5 @@
+Bac,Model,RMSE_test,R2_test,He_so_lon_nhat_tri_tuyet_doi
+4,Linear,4.062,0.9431,1901197.24
+4,Ridge,4.1649,0.9402,11.32
+5,Linear,3.9369,0.9466,1261820697.24
+5,Ridge,4.1487,0.9407,9.51
