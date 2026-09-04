@@ -1,0 +1,4 @@
+Model,RMSE,R2,So_bien_giu_lai,Tong_so_bien
+Ridge,3.1235,0.8947,14,14
+Lasso,3.1209,0.8949,14,14
+ElasticNet,3.1244,0.8946,14,14
