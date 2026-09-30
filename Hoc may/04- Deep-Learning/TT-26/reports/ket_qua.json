@@ -1,0 +1,32 @@
+{
+  "mo_hinh_duoc_chon": "Fine-tuning",
+  "nguong": 0.13,
+  "test": {
+    "nguong": 0.13,
+    "recall": 0.9923076923076923,
+    "specificity": 0.5683760683760684,
+    "precision": 0.7930327868852459,
+    "accuracy": 0.8333333333333334,
+    "auc": 0.9684856454087223,
+    "bo_sot_FN": 3,
+    "bao_dong_gia_FP": 101
+  },
+  "so_ca_bo_sot": 3,
+  "so_ca_viem_phoi_that": 390,
+  "so_bao_dong_gia": 101,
+  "gradcam_ty_le_nhiet_o_ria_tb": 0.4149859845638275,
+  "thong_ke_anh": {
+    "train": {
+      "NORMAL": 1341,
+      "PNEUMONIA": 3875
+    },
+    "val": {
+      "NORMAL": 8,
+      "PNEUMONIA": 8
+    },
+    "test": {
+      "NORMAL": 234,
+      "PNEUMONIA": 390
+    }
+  }
+}

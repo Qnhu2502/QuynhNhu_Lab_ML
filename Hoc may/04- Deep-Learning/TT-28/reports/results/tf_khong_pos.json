@@ -1,0 +1,9 @@
+{
+  "model": "tf_khong_pos",
+  "accuracy": 0.9196052631578947,
+  "macro_f1": 0.9195208195614657,
+  "train_seconds": 679.2525449999957,
+  "params": 2825476,
+  "predict_ms": 131.20788500003982,
+  "val_accuracy": 0.9252499938011169
+}

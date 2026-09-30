@@ -1,0 +1,4 @@
+mo_hinh,nguong,recall,specificity,precision,accuracy,auc,bo_sot_FN,bao_dong_gia_FP,dat_recall_muc_tieu
+CNN từ đầu,0.14,0.9708,0.6766,0.8968,0.8953,0.9668,17,65,True
+Transfer Learning (đóng băng),0.1,0.9742,0.8756,0.9578,0.9489,0.9861,15,25,True
+Fine-tuning,0.13,0.9725,0.9453,0.9809,0.9655,0.9928,16,11,True
