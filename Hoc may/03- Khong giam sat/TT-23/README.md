@@ -4,8 +4,7 @@
 1. Cai thu vien: `pip install scikit-learn pandas numpy matplotlib`
 2. Dat file `online_retail.csv` CUNG thu muc voi notebook `notebooks/kmeans_san_pham.ipynb`
 3. QUAN TRONG: mo notebook truc tiep (khong mo ca thu muc cha chua nhieu bai TT khac) roi
-   Restart Kernel + Run All, de outputs/ va reports/ duoc tao dung ngay canh notebook,
-   khong bi lac vao thu muc cha
+   Restart Kernel + Run All, de outputs/ va reports/ duoc tao dung ngay canh notebook
 4. Ket qua duoc luu vao outputs/san_pham_theo_cum.csv va reports/*.png khi chay den cell cuoi
 
 ## Cac buoc da thuc hien va nhan xet
@@ -17,10 +16,9 @@
      kinh doanh chap nhan duoc K=4..6, chon K=5 vi co silhouette cao nhat
      (0.253) trong nhom nay.
 6. n_init=1 qua 5 seed cho inertia dao dong 683.9,
-   trong khi n_init=10 on dinh hon han - xac nhan K-Means phu thuoc khoi tao ngau nhien.
+   trong khi n_init=10 on dinh hon han.
 7. PCA 2 chieu giai thich 78.7% phuong sai.
-8-9. Bang mo ta va TEN CUM duoc tinh tu XEP HANG TUONG DOI giua cac cum tren chinh
-     du lieu vua gom (khong hardcode), nen luon khop voi so lieu thuc te (xem reports/mo_ta_cum.png):
+8-9. Bang mo ta va TEN CUM duoc tinh tu XEP HANG TUONG DOI (khong hardcode):
  cum                                                       ten_cum                                                             de_xuat_trung_bay
    0              Gia cao, tan suat mua cao, chiem 21.0% doanh thu                       Vi tri trung tam, de thay nhat - dong gop doanh thu lon
    1              Gia cao, tan suat mua thap, chiem 1.1% doanh thu Khu trung bay rieng, anh sang tot - hang gia tri cao can tao cam giac cao cap
@@ -32,7 +30,6 @@
 
 ## Ba gia dinh K-Means va muc do thoa man
 1. Cum hinh cau, kich thuoc tuong duong - so_ma_hang moi cum tu 276
-   den 946, chenh lech dang ke nen gia dinh nay chi thoa man MOT PHAN.
+   den 946, chi thoa man MOT PHAN.
 2. Dac trung quan trong ngang nhau - da chuan hoa bang StandardScaler nen thoa man ve ky thuat.
-3. So cum K biet truoc - da chon K=5 co can cu ky thuat (bang silhouette day du)
-   va kinh doanh (chi xet K trong khoang sieu thi quan ly noi, 4-6) ro rang, khong chon tuy tien.
+3. So cum K biet truoc - da chon K=5 co can cu ky thuat va kinh doanh ro rang.
