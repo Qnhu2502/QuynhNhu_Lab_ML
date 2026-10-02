@@ -1,0 +1,59 @@
+{
+  "lam_sach": {
+    "so_dong_truoc": 200000,
+    "so_dong_sau": 183633,
+    "chi_tiet_loai_bo": {
+      "fare_amount <= 0": 2679,
+      "trip_distance <= 0 hoac > 100 miles": 3981,
+      "passenger_count == 0": 11665
+    }
+  },
+  "overfit_cay_khong_gioi_han": {
+    "so_la": 117701,
+    "do_sau": 41,
+    "mae_train": 0.009095498708924997,
+    "mae_test": 2.724755538613736
+  },
+  "chon_max_depth_bang_cv": {
+    "best_depth_theo_cv": 14,
+    "mae_cv_tai_best_depth": 2.324993932318945,
+    "max_depth_su_dung_thuc_te": 5,
+    "ly_do": "Uu tien kha nang tra bang tay cho tong dai theo yeu cau nghiep vu"
+  },
+  "bang_so_sanh_model": [
+    {
+      "model": "Baseline - DummyRegressor(mean)",
+      "MAE": 11.152337631384214,
+      "MAPE": 89.84253685799429,
+      "RMSE": 17.355617679224075
+    },
+    {
+      "model": "Baseline - Cong thuc tuyen tinh thu cong",
+      "MAE": 2.6510246685000136,
+      "MAPE": 24.070403052409606,
+      "RMSE": 5.368395291489874
+    },
+    {
+      "model": "Decision Tree (max_depth=5)",
+      "MAE": 2.440615856114953,
+      "MAPE": 22.35241306234654,
+      "RMSE": 5.626314185322902
+    },
+    {
+      "model": "Random Forest Regressor",
+      "MAE": 2.0184956941702588,
+      "MAPE": 18.470261535193018,
+      "RMSE": 4.637882562353119
+    },
+    {
+      "model": "Linear Regression",
+      "MAE": 2.636228037605702,
+      "MAPE": 23.684935074845782,
+      "RMSE": 5.361880846495223
+    }
+  ],
+  "ty_le_dat_sai_so_15pct": 59.61009611457511,
+  "dat_yeu_cau_nghiep_vu_15pct": false,
+  "so_luat_bang_tra_cuoc": 26,
+  "random_state": 42
+}

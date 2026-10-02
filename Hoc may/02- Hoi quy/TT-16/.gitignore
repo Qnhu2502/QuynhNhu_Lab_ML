@@ -1,0 +1,8 @@
+# Du lieu goc - khong commit, qua nang va de tai lai tu NYC TLC
+*.parquet
+*.csv.gz
+
+# Rac moi truong lam viec
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
