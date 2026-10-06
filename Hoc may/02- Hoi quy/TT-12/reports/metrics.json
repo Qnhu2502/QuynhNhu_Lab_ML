@@ -1,0 +1,103 @@
+{
+  "n_dong_sau_lam_sach": 4546,
+  "alpha_ridge_cv": 0.0517947467923121,
+  "metrics_test": {
+    "Dummy (trung bình)": {
+      "RMSE": 91.7197,
+      "MAE": 79.544,
+      "R2": -0.0002
+    },
+    "Linear": {
+      "RMSE": 2.8849,
+      "MAE": 2.3129,
+      "R2": 0.999
+    },
+    "Ridge (CV)": {
+      "RMSE": 2.8849,
+      "MAE": 2.3129,
+      "R2": 0.999
+    },
+    "Lasso (CV)": {
+      "RMSE": 2.8831,
+      "MAE": 2.3129,
+      "R2": 0.999
+    },
+    "ElasticNet (CV)": {
+      "RMSE": 2.8828,
+      "MAE": 2.3115,
+      "R2": 0.999
+    }
+  },
+  "vif": {
+    "Radio": 4.67,
+    "TV": 4.09,
+    "Social Media": 1.58,
+    "Influencer_Mega": 1.52,
+    "Influencer_Micro": 1.52,
+    "Influencer_Nano": 1.52
+  },
+  "bootstrap_std_ratio_ridge_over_linear": {
+    "TV": 1.0,
+    "Radio": 1.0,
+    "Social Media": 1.0,
+    "Influencer_Mega": 1.0,
+    "Influencer_Micro": 1.0,
+    "Influencer_Nano": 1.0
+  },
+  "tu_sinh": {
+    "vif": {
+      "TV": 26.4,
+      "Facebook": 26.4,
+      "Google": 1.0
+    },
+    "alpha_cv": 0.49417133613238334,
+    "std": {
+      "Linear": {
+        "TV": 7.807,
+        "Facebook": 6.163,
+        "Google": 2.7
+      },
+      "Ridge alpha CV (0.49)": {
+        "TV": 7.22,
+        "Facebook": 5.75,
+        "Google": 2.698
+      },
+      "Ridge alpha=10": {
+        "TV": 3.966,
+        "Facebook": 3.894,
+        "Google": 2.676
+      }
+    }
+  },
+  "roi": {
+    "TV": {
+      "ROI (Sales / 1 đv ngân sách)": 3.5632,
+      "CI95 thấp": 3.5589,
+      "CI95 cao": 3.5665,
+      "CI chứa 0?": false
+    },
+    "Radio": {
+      "ROI (Sales / 1 đv ngân sách)": -0.0021,
+      "CI95 thấp": -0.011,
+      "CI95 cao": 0.0092,
+      "CI chứa 0?": true
+    },
+    "Social Media": {
+      "ROI (Sales / 1 đv ngân sách)": -0.0146,
+      "CI95 thấp": -0.0426,
+      "CI95 cao": 0.0104,
+      "CI chứa 0?": true
+    }
+  },
+  "tv2_p_value": 0.4051417154585095,
+  "de_xuat_ty_le": {
+    "TV": 86.6,
+    "Radio": 8.4,
+    "Social Media": 5.0
+  },
+  "sales_change_pct": {
+    "mean": 20.984946023220818,
+    "lo": 20.901378880014992,
+    "hi": 21.065063874991434
+  }
+}

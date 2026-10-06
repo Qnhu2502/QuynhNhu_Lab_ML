@@ -1,0 +1,4 @@
+,ROI (Sales / 1 đv ngân sách),CI95 thấp,CI95 cao,CI chứa 0?
+TV,3.5632,3.5589,3.5665,False
+Radio,-0.0021,-0.011,0.0092,True
+Social Media,-0.0146,-0.0426,0.0104,True
