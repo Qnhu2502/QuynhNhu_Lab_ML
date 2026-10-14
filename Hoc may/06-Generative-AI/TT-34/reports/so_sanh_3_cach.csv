@@ -1,0 +1,4 @@
+,NDCG@10,P@10
+TF-IDF,0.882,0.52
+Embedding (nguyên CV),0.933,0.56
+Embedding + chunking,0.942,0.56

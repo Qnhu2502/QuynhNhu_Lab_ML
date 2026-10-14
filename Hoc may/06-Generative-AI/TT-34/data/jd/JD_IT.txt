@@ -1,0 +1,6 @@
+Software Engineer
+We are looking for a software developer to build and maintain web applications and internal tools.
+Responsibilities
+Design, code and test features for our web platform. Work with databases and REST APIs, review code, fix defects, and support production deployments. Collaborate with product managers and QA in an agile team.
+Requirements
+Experience with Java, Python or JavaScript and a modern front-end framework such as React. Solid knowledge of SQL, version control (Git) and unit testing. Familiarity with cloud services and CI/CD pipelines is a plus. Bachelor's degree in Computer Science or equivalent experience.

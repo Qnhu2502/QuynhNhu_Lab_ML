@@ -1,0 +1,4 @@
+model,NDCG@10,P@10,chieu,max_seq,dung_luong_MB,encode_1000_CV_giay(uoc_tinh),tra_cuu_1_JD_ms
+all-MiniLM-L6-v2,0.942,0.56,384,256,86.644,147.779,46.209
+all-mpnet-base-v2,0.906,0.58,768,384,417.658,1727.777,153.424
+paraphrase-multilingual-MiniLM-L12-v2,0.929,0.56,384,128,448.813,1263.775,547.817
