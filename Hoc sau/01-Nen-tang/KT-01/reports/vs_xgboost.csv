@@ -1,0 +1,3 @@
+model,val_prauc,test_prauc,train_time_s,code_lines
+MLP PyTorch (SGD),0.6313,0.654,17.0389,74
+XGBoost,0.6405,0.6592,2.1668,2
