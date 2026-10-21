@@ -1,0 +1,9 @@
+bn,init,final_loss,test_acc
+False,zeros,2.3021,0.1135
+False,random_nho,2.3021,0.1135
+False,xavier,0.0416,0.9762
+False,he,0.0456,0.9734
+True,zeros,2.3021,0.1135
+True,random_nho,0.0453,0.9824
+True,xavier,0.0327,0.98
+True,he,0.0277,0.9799

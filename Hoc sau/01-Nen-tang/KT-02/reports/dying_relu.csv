@@ -1,0 +1,13 @@
+activation,lr,test_acc,diverged,dead_pct
+ReLU,0.01,0.946,False,0.1302
+ReLU,0.1,0.9609,False,0.0
+ReLU,0.5,0.098,True,
+ReLU,1.0,0.098,True,
+ReLU,2.0,0.098,True,
+ReLU,5.0,0.098,True,
+LeakyReLU,0.01,0.9455,False,0.1302
+LeakyReLU,0.1,0.9587,False,0.0
+LeakyReLU,0.5,0.098,True,
+LeakyReLU,1.0,0.098,True,
+LeakyReLU,2.0,0.098,True,
+LeakyReLU,5.0,0.098,True,
